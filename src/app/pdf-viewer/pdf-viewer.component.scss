@@ -1,0 +1,96 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#page1 {
+  padding-top: 60px;
+}
+
+.header {
+  position: fixed;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 5px 0 rgb(0 0 0 / 14%),
+  0 1px 10px 0 rgb(0 0 0 / 12%),
+  0 2px 4px -1px rgb(0 0 0);
+  background-color: #fff;
+  z-index: 1;
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    height: 30px;
+    width: 30px;
+    margin: 0 10px;
+    cursor: pointer;
+    &.signature {
+      width: 80px;
+      justify-content: space-between;
+    }
+  }
+  .zoom {
+    display: flex;
+    margin-left: 20px;
+    button {
+      width: 25px;
+      justify-content: center;
+      margin: 10px;
+    }
+  }
+}
+
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 30px;
+  height: 0;
+  margin-bottom: 5px;
+  .close-button {
+    position: absolute;
+    right: 0;
+    top: -20px;
+    color: red;
+    cursor: pointer;
+  }
+}
+.mini-video {
+  position: fixed!important;
+  transition: all 1s;
+  transform: translateY(0);
+  right: 80px;
+  top: 130px;
+  max-height: 140px;
+  height: 140px;
+  width: 250px;
+  z-index: 2000;
+  padding: 0;
+}
+
+@media (max-width: 425px) {
+  .mini-video {
+    transform: translateX(50%);
+    right: 50%;
+  }
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  background-color: #fff;
+  box-shadow: 0 -4px 5px 0 rgb(0 0 0 / 14%),
+  0 -1px 10px 0 rgb(0 0 0 / 12%),
+  0 -2px 4px -1px rgb(0 0 0);
+}

@@ -1,0 +1,167 @@
+ngx-extended-pdf-viewer {
+  #viewerContainer {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    position: absolute;
+  }
+
+  .invisible {
+    display: none !important;
+  }
+}
+
+@media print {
+  body[data-pdfjsprinting] > * {
+    display: none !important;
+  }
+  body[data-pdfjsprinting] #printContainer {
+    display: block !important;
+  }
+  body[data-pdfjsprinting] #printContainer div img {
+    height: 100vh !important;
+  }
+}
+
+body[data-pdfjsprinting] #printContainer,
+body[data-pdfjsprinting] #printContainer * {
+  padding: 0;
+  margin: 0;
+}
+
+body[data-pdfjsprinting] #printContainer,
+body[data-pdfjsprinting] #printContainer * {
+  font: message-box;
+  outline: none;
+}
+
+#printContainer canvas,
+#printContainer img {
+  display: block !important;
+}
+
+ngx-extended-pdf-viewer {
+  #outerContainer {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@media print {
+  html {
+    overflow-y: visible !important;
+  }
+
+  body {
+    overflow-y: visible !important;
+  }
+
+  html.cdk-global-scrollblock {
+    width: initial;
+    position: initial;
+  }
+}
+
+ngx-extended-pdf-viewer {
+  .textLayer .highlight.color0 {
+    background-color: $highlight-color0;
+  }
+  .textLayer .highlight.color0.selected {
+    background-color: $highlight-color0-selected;
+  }
+
+  .textLayer .highlight.color1 {
+    background-color: $highlight-color1;
+  }
+  .textLayer .highlight.color1.selected {
+    background-color: $highlight-color1-selected;
+  }
+
+  .textLayer .highlight.color2 {
+    background-color: $highlight-color2;
+  }
+  .textLayer .highlight.color2.selected {
+    background-color: $highlight-color2-selected;
+  }
+
+  .textLayer .highlight.color3 {
+    background-color: $highlight-color3;
+  }
+  .textLayer .highlight.color3.selected {
+    background-color: $highlight-color3-selected;
+  }
+
+  textLayer .highlight.color4 {
+    background-color: $highlight-color4;
+  }
+  .textLayer .highlight.color4.selected {
+    background-color: $highlight-color4-selected;
+  }
+}
+
+html[dir='ltr'] ngx-extended-pdf-viewer .overlayButton,
+html[dir='ltr'] ngx-extended-pdf-viewer .toolbarButton {
+  margin: 3px 0 4px 0;
+}
+
+html[dir='ltr'] ngx-extended-pdf-viewer .toolbarButton:last-child,
+html[dir='rtl'] ngx-extended-pdf-viewer .toolbarButton:first-child {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+html[dir='ltr'] ngx-extended-pdf-viewer #secondaryToolbarToggle {
+  margin-right: 4px;
+  margin-left: 0;
+}
+html[dir='rtl'] ngx-extended-pdf-viewer #secondaryToolbarToggle {
+  margin-right: 0;
+  margin-left: 4px;
+}
+
+ngx-extended-pdf-viewer {
+  .toolbarButton,
+  .secondaryToolbarButton,
+  .overlayButton {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .offscreen {
+    position: fixed !important;
+    left: -9999px !important;
+    display: block !important;
+    width: 3000px !important;
+  }
+
+  .offscreen #sidebarContainer {
+    top: 1000px !important;
+  }
+
+  .toolbarButton {
+    margin-left: -1px !important;
+    margin-right: -2px !important;
+  }
+
+  #numPages {
+    padding-right: 0;
+  }
+
+  .pdf-viewer-template,
+  .pdf-viewer-template * {
+    display: none;
+  }
+}
+
+ngx-extended-pdf-viewer {
+  button:focus,
+  a:focus,
+  input:focus,
+  select:focus {
+    outline: none;
+    border: 1px solid blue;
+  }
+
+  input[type="checkbox"]:focus {
+    outline: 1px solid blue;
+  }
+}
+

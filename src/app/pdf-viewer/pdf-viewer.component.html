@@ -1,0 +1,30 @@
+<div class="header">
+  <button class="signature">
+    signature <i class="fas fa-file-signature"></i>
+  </button>
+  <button (click)="zoomIn()">+</button>
+  <button (click)="zoomOut()">-</button>
+</div>
+<pinch-zoom [backgroundColor]="'transparent'"
+            [overflow]="'visible'"
+            [wheel]="false"
+            [disableZoomControl]="'disable'"
+            [zoomControlScale]="0.25"
+            #pinch="pinchZoom"
+>
+  <div>
+    <div *ngFor="let page of pages; let i = index; let first = first" id="page{{i+1}}">
+      <app-page-viewer [page]="page" [paddingTop]="first ? '0' : spacerSize" [quality]="quality">
+      </app-page-viewer>
+      <div *ngIf="i === 0" class="video-container" #video>
+        <app-video-viewer></app-video-viewer>
+      </div>
+    </div>
+  </div>
+</pinch-zoom>
+<div *ngIf="miniVideo" class="mini-video">
+  <app-video-viewer></app-video-viewer>
+</div>
+<div class="footer">
+  footer
+</div>
