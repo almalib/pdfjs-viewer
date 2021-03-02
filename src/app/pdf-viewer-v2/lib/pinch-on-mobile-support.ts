@@ -9,7 +9,9 @@ export class PinchOnMobileSupport {
   private pinchScale = 1;
   private firstDoubleTap = true;
   private isTapedTwice = false;
-
+  private doubleTapTimeout: any;
+  private doubleTapMinTimeout = 300;
+  private lastTap = 0;
 
   constructor(private _zone: NgZone) {
     if (this.isMobile()) {
@@ -99,51 +101,61 @@ export class PinchOnMobileSupport {
     event.stopPropagation();
   }
 
-  doubLeTapZoom(event: TouchEvent): boolean {
+  detectDoubleTap(): boolean {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - this.lastTap;
+    clearTimeout(this.doubleTapTimeout);
+    if (tapLength < this.doubleTapMinTimeout && tapLength > 0) {
+      return true;
+    } else {
+      this.doubleTapTimeout = setTimeout(() => {
+        clearTimeout(this.doubleTapTimeout);
+      }, this.doubleTapMinTimeout);
+    }
+    this.lastTap = currentTime;
+  }
+
+  doubleTapZoom(event: TouchEvent): void {
     const container = document.getElementById('viewerContainer') as HTMLDivElement;
     const PDFViewerApplication: any = (window as any).PDFViewerApplication;
-    if (!this.isTapedTwice) {
-      this.isTapedTwice = true;
-      setTimeout(() => {
-        this.isTapedTwice = false;
-      }, 500);
-      return false;
+    if (this.detectDoubleTap()) {
+      if (this.firstDoubleTap) {
+        const offset = {
+          x: container.scrollLeft,
+          y: container.scrollTop
+        };
+        const loc = {
+          x: event.touches[0].pageX + offset.x,
+          y: event.touches[0].pageY + offset.y
+        };
+        const zoomPoint = {
+          x: loc.x / PDFViewerApplication.pdfViewer.currentScale,
+          y: loc.y / PDFViewerApplication.pdfViewer.currentScale
+        };
+
+        // zoom
+        PDFViewerApplication.pdfViewer.currentScale += PDFViewerApplication.pdfViewer.currentScale;
+
+        const zoomPointNew = {
+          x: zoomPoint.x * PDFViewerApplication.pdfViewer.currentScale,
+          y: zoomPoint.y * PDFViewerApplication.pdfViewer.currentScale
+        };
+        const newScroll = {
+          x: zoomPointNew.x - event.touches[0].pageX,
+          y: zoomPointNew.y - event.touches[0].pageY
+        };
+
+        container.scrollTop = newScroll.y;
+        container.scrollLeft = newScroll.x;
+        this.firstDoubleTap = false;
+
+      } else {
+        PDFViewerApplication.pdfViewer.currentScale /= 2;
+        this.firstDoubleTap = true;
+      }
+      event.preventDefault();
     }
-    if (this.firstDoubleTap) {
-      const offset = {
-        x: container.scrollLeft,
-        y: container.scrollTop
-      };
-      const loc = {
-        x: event.touches[0].pageX + offset.x,
-        y: event.touches[0].pageY + offset.y
-      };
-      const zoomPoint = {
-        x: loc.x / PDFViewerApplication.pdfViewer.currentScale,
-        y: loc.y / PDFViewerApplication.pdfViewer.currentScale
-      };
 
-      // zoom
-      PDFViewerApplication.pdfViewer.currentScale += PDFViewerApplication.pdfViewer.currentScale;
-
-      const zoomPointNew = {
-        x: zoomPoint.x * PDFViewerApplication.pdfViewer.currentScale,
-        y: zoomPoint.y * PDFViewerApplication.pdfViewer.currentScale
-      };
-      const newScroll = {
-        x: zoomPointNew.x - event.touches[0].pageX,
-        y: zoomPointNew.y - event.touches[0].pageY
-      };
-
-      container.scrollTop = newScroll.y;
-      container.scrollLeft = newScroll.x;
-      this.firstDoubleTap = false;
-
-    } else {
-      PDFViewerApplication.pdfViewer.currentScale /= 2;
-      this.firstDoubleTap = true;
-    }
-    event.preventDefault();
   }
 
 
@@ -156,7 +168,7 @@ export class PinchOnMobileSupport {
     this.viewer = document.getElementById('viewer');
     this._zone.runOutsideAngular(() => {
       document.addEventListener('touchstart', this.onViewerTouchStart.bind(this));
-      document.addEventListener('touchstart', this.doubLeTapZoom.bind(this), {passive: false});
+      document.addEventListener('touchstart', this.doubleTapZoom.bind(this), {passive: false});
       document.addEventListener('touchmove', this.onViewerTouchMove.bind(this), {passive: false});
       document.addEventListener('touchend', this.onViewerTouchEnd.bind(this));
     });
@@ -165,7 +177,7 @@ export class PinchOnMobileSupport {
   public destroyPinchZoom(): void {
     if (this.isMobile()) {
       document.removeEventListener('touchstart', this.onViewerTouchStart);
-      document.removeEventListener('touchstart', this.doubLeTapZoom);
+      document.removeEventListener('touchstart', this.doubleTapZoom);
       document.removeEventListener('touchmove', this.onViewerTouchMove);
       document.removeEventListener('touchend', this.onViewerTouchEnd);
     }
